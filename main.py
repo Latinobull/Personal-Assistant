@@ -21,7 +21,15 @@ def listen():
     except sr.RequestError as err:
         print(f'Requested failed; {err}')
     print(data)
+    response(data)
     return data
+
+
+def response(audioString):
+    print(audioString)
+    tts = gTTS(text=audioString, lang='en')
+    tts.save('speech/response.mp3')
+    os.system('start speech/response.mp3')
 
 
 listen()
