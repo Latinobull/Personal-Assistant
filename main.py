@@ -1,11 +1,9 @@
+import os
 import speech_recognition as sr
 from time import ctime
 import time
 from gtts import gTTS
 from playsound import playsound
-
-
-time.sleep(.5)
 
 
 def listen():
@@ -21,22 +19,22 @@ def listen():
         print('Google could not recognize what you said')
     except sr.RequestError as err:
         print(f'Requested failed; {err}')
-    print(data)
-    response(data)
     return data
 
 
 def response(audioString):
     print(audioString)
     tts = gTTS(text=audioString, lang='en')
-    tts.save('speech/response.mp3')
-    playsound('speech/response.mp3')
+    tts.save(f'speech/response.mp3')
+    playsound(f'speech/response.mp3')
+    os.remove('speech/response.mp3')
 
 
 def digital_assistant(data):
     if 'what is your name' in data:
+        print(data)
         listening = True
-        response('Doing Good')
+        response('My name is Ria and I am your personal assistant')
     if 'what time is it' in data:
         listening = True
         response(ctime())
@@ -44,4 +42,15 @@ def digital_assistant(data):
         listening = False
         response('Have a great day')
         return listening
+    else:
+        listening = False
+        response('Have a great day')
     return listening
+
+
+time.sleep(1)
+response('How can I help You Donnahue?')
+listening = True
+while listening == True:
+    data = listen()
+    listening = digital_assistant(data)
