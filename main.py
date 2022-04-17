@@ -1,6 +1,6 @@
 import os
 import speech_recognition as sr
-from time import ctime
+import datetime
 import time
 from gtts import gTTS
 from playsound import playsound
@@ -38,15 +38,23 @@ def digital_assistant(data):
         response('My name is Ria and I am your personal assistant')
     if 'what time is it' in data:
         listening = True
-        response(ctime())
+        x = str(datetime.datetime.now().strftime('%H:%M %p'))
+        response(x)
     if "where is" in data:
         listening = True
         data = data.split(" ")
-        location_url = "https://www.google.com/maps/place/" + str(data[2])
+        location_url = f'https://www.google.com/maps/place/{str(data[2])}'
         response("Hold on DJ, I will show you where " + data[2] + " is.")
         webbrowser.get().open_new_tab(location_url)
         listening = False
         response('Have a great day')
+    if 'show me' in data:
+        data = data.split(' ')
+        data = ' '.join(data[2:])
+        location_url = f'https://www.google.com/search?q={data}'
+        response(f'Here is {data} on Google')
+        webbrowser.get().open_new_tab(location_url)
+        print(data)
     if data == '':
         listening = False
         response('Have a great day')
