@@ -7,6 +7,7 @@ from playsound import playsound
 import webbrowser
 from dotenv import load_dotenv
 import requests
+import json
 load_dotenv()
 
 
@@ -77,6 +78,9 @@ def digital_assistant(data):
             response(resp_string)
         else:
             response("City Not Found")
+    # if 'definiton' in data:
+    #     app_id = os.getenv('dictID')
+    #     app_key = os.getenv('dictKey')
 
     if data == '':
         listening = False
@@ -86,8 +90,28 @@ def digital_assistant(data):
 
 
 time.sleep(.5)
-response('How can I help You DJ?')
-listening = True
-while listening == True:
-    data = listen()
-    listening = digital_assistant(data)
+# response('How can I help You DJ?')
+# listening = True
+# while listening == True:
+#     data = listen()
+#     listening = digital_assistant(data)
+
+
+def testing():
+    app_id = os.getenv('dictID')
+    app_key = os.getenv('dictKey')
+    print(app_id, app_key)
+    endpoints = 'words'
+    language_code = 'en-us'
+    word_id = 'creation'
+
+    url = f'https://od-api.oxforddictionaries.com/api/v2/words/{language_code}?q={word_id}&fields=definitions'
+    r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
+    definiton = r.json()
+    definiton = definiton['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]
+    print(definiton.get('definitions'))
+    for i in definiton.get('definitions'):
+        response(i)
+
+
+testing()
