@@ -1,4 +1,3 @@
-from operator import truediv
 import os
 import speech_recognition as sr
 import datetime
@@ -48,7 +47,7 @@ def digital_assistant(data):
         listening = True
         data = data.split(" ")
         location_url = f'https://www.google.com/maps/place/{str(data[2])}'
-        response("Hold on DJ, I will show you where " + data[2] + " is.")
+        response(f'Hold on DJ, I will show you where {data[2]} is.')
         webbrowser.get().open_new_tab(location_url)
         listening = False
         response('Have a great day')
@@ -73,9 +72,8 @@ def digital_assistant(data):
             temp = round((weather["temp"] - 273.15) * 9/5 + 32)
             hum = weather["humidity"]
             desc = js["weather"][0]["description"]
-            resp_string = " The temperature is " + \
-                str(temp) + " The humidity is " + str(hum) + \
-                " and The weather description is " + str(desc)
+            resp_string = f'The temperature is{str(temp)} The humidity is {str(hum)} and The weather description is {str(desc)}'
+
             response(resp_string)
         else:
             response("City Not Found")
