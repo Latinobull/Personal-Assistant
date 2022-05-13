@@ -1,3 +1,4 @@
 assistantenv
 speech
 .env
+__pycache__

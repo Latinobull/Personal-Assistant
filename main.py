@@ -1,3 +1,4 @@
+import func
 import os
 import speech_recognition as sr
 import datetime
@@ -5,10 +6,8 @@ import time
 from gtts import gTTS
 from playsound import playsound
 import webbrowser
-from dotenv import load_dotenv
 import requests
-import json
-load_dotenv()
+
 
 
 def listen():
@@ -33,26 +32,6 @@ def response(audioString):
     tts.save(f'speech/response.mp3')
     playsound(f'speech/response.mp3')
     os.remove('speech/response.mp3')
-
-
-def dictonaryDefiniton(data):
-    app_id = os.getenv('dictID')
-    app_key = os.getenv('dictKey')
-    language_code = 'en-us'
-    word_id = ''
-    data = data.split(' ')
-    for i in range(0, len(data)):
-        if data[i] == 'of':
-            word_id = data[i+1]
-    print(data)
-
-    url = f'https://od-api.oxforddictionaries.com/api/v2/words/{language_code}?q={word_id}&fields=definitions'
-    r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
-    definiton = r.json()
-    definiton = definiton['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]
-    print(definiton.get('definitions'))
-    for i in definiton.get('definitions'):
-        response(i)
 
 
 def digital_assistant(data):
@@ -100,8 +79,7 @@ def digital_assistant(data):
             response("City Not Found")
     if 'definition' in data:
         listening = True
-        dictonaryDefiniton(data)
-
+        response(func.dictonaryDefiniton(data))
     if data == '':
         listening = False
         response('Have a great day')
