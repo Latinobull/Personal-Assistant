@@ -5,9 +5,6 @@ import datetime
 import time
 from gtts import gTTS
 from playsound import playsound
-import webbrowser
-import requests
-
 
 
 def listen():
@@ -45,38 +42,14 @@ def digital_assistant(data):
         response(x)
     if "where is" in data:
         listening = True
-        data = data.split(" ")
-        location_url = f'https://www.google.com/maps/place/{str(data[2])}'
-        response(f'Hold on DJ, I will show you where {data[2]} is.')
-        webbrowser.get().open_new_tab(location_url)
-        listening = False
-        response('Have a great day')
+
+        response(func.locationSearch(data))
     if 'show me' in data:
         listening = True
-        data = data.split(' ')
-        data = ' '.join(data[2:])
-        location_url = f'https://www.google.com/search?q={data}'
-        response(f'Here is {data} on Google')
-        webbrowser.get().open_new_tab(location_url)
-        print(data)
+        response(func.googleSearch(data))
     if 'what is the weather in' in data:
         listening = True
-        APIKEY = os.getenv('API-KEY')
-        weather_url = "http://api.openweathermap.org/data/2.5/weather?"
-        data = data.split(" ")
-        location = str(data[5])
-        url = f'{weather_url}appid={APIKEY}&q={location} '
-        js = requests.get(url).json()
-        if js["cod"] != "404":
-            weather = js["main"]
-            temp = round((weather["temp"] - 273.15) * 9/5 + 32)
-            hum = weather["humidity"]
-            desc = js["weather"][0]["description"]
-            resp_string = f'The temperature is{str(temp)} The humidity is {str(hum)} and The weather description is {str(desc)}'
-
-            response(resp_string)
-        else:
-            response("City Not Found")
+        response(func.getWeather(data))
     if 'definition' in data:
         listening = True
         response(func.dictonaryDefiniton(data))
