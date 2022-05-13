@@ -35,6 +35,26 @@ def response(audioString):
     os.remove('speech/response.mp3')
 
 
+def dictonaryDefiniton(data):
+    app_id = os.getenv('dictID')
+    app_key = os.getenv('dictKey')
+    language_code = 'en-us'
+    word_id = ''
+    data = data.split(' ')
+    for i in range(0, len(data)):
+        if data[i] == 'of':
+            word_id = data[i+1]
+    print(data)
+
+    url = f'https://od-api.oxforddictionaries.com/api/v2/words/{language_code}?q={word_id}&fields=definitions'
+    r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
+    definiton = r.json()
+    definiton = definiton['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]
+    print(definiton.get('definitions'))
+    for i in definiton.get('definitions'):
+        response(i)
+
+
 def digital_assistant(data):
     if 'what is your name' in data:
         print(data)
@@ -78,9 +98,9 @@ def digital_assistant(data):
             response(resp_string)
         else:
             response("City Not Found")
-    # if 'definiton' in data:
-    #     app_id = os.getenv('dictID')
-    #     app_key = os.getenv('dictKey')
+    if 'definition' in data:
+        listening = True
+        dictonaryDefiniton(data)
 
     if data == '':
         listening = False
@@ -90,28 +110,8 @@ def digital_assistant(data):
 
 
 time.sleep(.5)
-# response('How can I help You DJ?')
-# listening = True
-# while listening == True:
-#     data = listen()
-#     listening = digital_assistant(data)
-
-
-def testing():
-    app_id = os.getenv('dictID')
-    app_key = os.getenv('dictKey')
-    print(app_id, app_key)
-    endpoints = 'words'
-    language_code = 'en-us'
-    word_id = 'creation'
-
-    url = f'https://od-api.oxforddictionaries.com/api/v2/words/{language_code}?q={word_id}&fields=definitions'
-    r = requests.get(url, headers={'app_id': app_id, 'app_key': app_key})
-    definiton = r.json()
-    definiton = definiton['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]
-    print(definiton.get('definitions'))
-    for i in definiton.get('definitions'):
-        response(i)
-
-
-testing()
+response('How can I help You DJ?')
+listening = True
+while listening == True:
+    data = listen()
+    listening = digital_assistant(data)
