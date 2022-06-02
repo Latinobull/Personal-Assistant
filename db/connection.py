@@ -24,6 +24,9 @@ def connect():
         db_version = cur.fetchone()
         print(db_version)
 
+        cur.execute(
+            "CREATE TABLE IF NOT EXISTS myuser (id SERIAL PRIMARY KEY, name TEXT, location text )")
+        conn.commit()
         # close the communication with the PostgreSQL
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
