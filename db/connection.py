@@ -25,7 +25,7 @@ def connect():
         print(db_version)
 
         cur.execute(
-            "CREATE TABLE IF NOT EXISTS myuser (id SERIAL PRIMARY KEY, name TEXT, location text )")
+            "CREATE TABLE IF NOT EXISTS myuser (id SERIAL PRIMARY KEY, name TEXT, location TEXT )")
         conn.commit()
         # close the communication with the PostgreSQL
         cur.close()

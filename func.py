@@ -2,7 +2,10 @@ import os
 import requests
 from dotenv import load_dotenv
 import webbrowser
+from db.routes import Database
 load_dotenv()
+
+DB = Database()
 
 
 def dictonaryDefiniton(data):
@@ -43,6 +46,7 @@ def getWeather(data):
     else:
         return"City Not Found"
 
+
 def googleSearch(data):
     data = data.split(' ')
     data = ' '.join(data[2:])
@@ -50,9 +54,19 @@ def googleSearch(data):
     webbrowser.get().open_new_tab(location_url)
     return f'Here is {data} on Google'
 
+
 def locationSearch(data):
     data = data.split(" ")
     data = ' '.join(data[2:])
     location_url = f'https://www.google.com/maps/place/{str(data)}'
     webbrowser.get().open_new_tab(location_url)
     return f'Here is {data}.'
+
+
+def findUser():
+    user = DB.findUser()
+    return user
+
+def createUser(data):
+    DB.createUser(data)
+

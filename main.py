@@ -42,7 +42,6 @@ def digital_assistant(data):
         response(x)
     if "where is" in data:
         listening = True
-
         response(func.locationSearch(data))
     if 'show me' in data:
         listening = True
@@ -57,6 +56,16 @@ def digital_assistant(data):
         listening = False
         response('Have a great day')
         return listening
+    if 'my name' in data:
+        listening = True
+        user = func.findUser()
+        if user == []:
+            response(f"I don't have you in my system. Please tell me your name")
+            userName = listen()
+            func.createUser(userName)
+            response(f'We stored your name as {userName}')
+            return listening
+
     return listening
 
 
